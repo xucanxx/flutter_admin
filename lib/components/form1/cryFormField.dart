@@ -9,11 +9,11 @@ class CryFormField extends StatefulWidget {
   final Function builder;
 
   CryFormField({
-    Key key,
-    this.label,
-    this.builder,
-    this.width,
-    this.labelWidth,
+    Key? key,
+    required this.label,
+    required this.builder,
+    this.width = 300,
+    this.labelWidth = 100,
   }) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class CryFormFieldState extends State<CryFormField> {
         child: Row(
           children: <Widget>[
             SizedBox(
-              width: widget.labelWidth ?? 100,
+              width: widget.labelWidth,
               child: Padding(
                 padding: EdgeInsets.only(right: 20),
                 child: Align(
@@ -50,14 +50,14 @@ class CryFormFieldState extends State<CryFormField> {
         ),
       );
     } else {
-      double boxWidth = (widget.width ?? 300) - (widget.labelWidth ?? 100);
+      double boxWidth = widget.width - widget.labelWidth;
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: UnconstrainedBox(
           child: Row(
             children: <Widget>[
               SizedBox(
-                width: widget.labelWidth ?? 100,
+                width: widget.labelWidth,
                 child: Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Align(

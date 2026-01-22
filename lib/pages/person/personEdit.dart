@@ -12,8 +12,8 @@ import 'package:intl/intl.dart';
 import '../../generated/l10n.dart';
 
 class PersonEdit extends StatefulWidget {
-  final Person person;
-  const PersonEdit({Key key, this.person}) : super(key: key);
+  final Person? person;
+  const PersonEdit({Key? key, this.person}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PersonEditState();
@@ -27,7 +27,7 @@ class PersonEditState extends State<PersonEdit> {
   void initState() {
     super.initState();
     if (widget.person != null) {
-      formData = widget.person;
+      formData = widget.person!;
     }
   }
 
@@ -41,17 +41,17 @@ class PersonEditState extends State<PersonEdit> {
             value: formData.name,
             label: S.of(context).personName,
             onSaved: (v) {
-              formData.name = v;
+              formData.name = v ?? '';
             },
             validator: (v) {
-              return v.isEmpty ? S.of(context).personRequired : null;
+              return (v?.isEmpty ?? true) ? S.of(context).personRequired : null;
             },
           ),
           CryInput(
             value: formData.nickName,
             label: S.of(context).personNickname,
             onSaved: (v) {
-              formData.nickName = v;
+              formData.nickName = v ?? '';
             },
           ),
           CrySelect(
@@ -87,8 +87,8 @@ class PersonEditState extends State<PersonEdit> {
         CryButton(
           label: S.of(context).save,
           onPressed: () {
-            FormState form = formKey.currentState;
-            if (!form.validate()) {
+            FormState? form = formKey.currentState;
+            if (form == null || !form.validate()) {
               return;
             }
             form.save();

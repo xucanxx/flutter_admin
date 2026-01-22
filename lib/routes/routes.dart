@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_admin/pages/common/page404.dart';
 import 'package:flutter_admin/pages/dash/dashboard.dart';
 import 'package:flutter_admin/pages/layout/layout.dart';
-import 'package:flutter_admin/pages/layout/layoutNoRoutes.dart' as layoutNoRoutes;
+import 'package:flutter_admin/pages/layout/layoutNoRoutes.dart'
+    as layoutNoRoutes;
 import 'package:flutter_admin/pages/login.dart';
 import 'package:flutter_admin/pages/menu/menuDemoList.dart';
 import 'package:flutter_admin/pages/myTest.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_admin/pages/person/personList.dart';
 import 'package:flutter_admin/utils/utils.dart';
 
 import '../pages/image/imageUpload.dart';
-import '../pages/menu/menuDemoList.dart';
 import '../pages/userInfo/userInfoEdit.dart';
 import '../pages/video/videoUpload.dart';
 
@@ -42,7 +42,7 @@ Map<String, WidgetBuilder> routes = routesData.map((key, value) {
 
 class Routes {
   static onGenerateRoute(RouteSettings settings) {
-    String name = settings.name;
+    String? name = settings.name;
     if (!routes.containsKey(name)) {
       name = '/404';
     }
@@ -51,6 +51,6 @@ class Routes {
     } else if (name == '/login') {
       name = '/dashbooad';
     }
-    return MaterialPageRoute(builder: routes[name], settings: settings);
+    return MaterialPageRoute(builder: routes[name] ?? (_) => Container(), settings: settings);
   }
 }

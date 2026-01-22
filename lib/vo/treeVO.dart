@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TreeVO<T extends TreeData> {
-  TreeVO({this.data});
+  TreeVO({required this.data});
 
   T data;
   List<TreeVO<T>> children = [];

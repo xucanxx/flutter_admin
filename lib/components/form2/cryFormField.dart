@@ -6,9 +6,9 @@ class CryFormField extends StatefulWidget {
   final Function builder;
 
   CryFormField({
-    Key key,
-    this.builder,
-    this.width,
+    Key? key,
+    required this.builder,
+    this.width = double.infinity,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class CryFormFieldState extends State<CryFormField> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
-      width: widget.width ?? double.infinity,
+      width: widget.width,
       child: widget.builder(this),
     );
   }

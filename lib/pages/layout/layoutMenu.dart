@@ -8,7 +8,7 @@ import '../../utils/utils.dart';
 import '../../vo/treeVO.dart';
 
 class LayoutMenu extends StatefulWidget {
-  LayoutMenu({Key key, this.onClick, this.data}) : super(key: key);
+  LayoutMenu({Key? key, required this.onClick, required this.data}) : super(key: key);
   final Function onClick;
   final List<TreeVO<Menu>> data;
 
@@ -49,17 +49,16 @@ class _LayoutMenuState extends State<LayoutMenu> {
   }
 
   List<Widget> _getMenuListTile(List<TreeVO<Menu>> data) {
-    if (data == null) {
-      return [];
-    }
     List<Widget> listTileList = data.map<Widget>((TreeVO<Menu> treeVO) {
       IconData iconData = Utils.toIconData(treeVO.data.icon);
-      String name = Intl.defaultLocale == 'en' ? treeVO.data.nameEn ?? '' : treeVO.data.name ?? '';
+      String name = Intl.defaultLocale == 'en'
+          ? treeVO.data.nameEn
+          : treeVO.data.name ?? '';
       Text title = Text(expandMenu ? name : '');
-      if (treeVO.children != null && treeVO.children.length > 0) {
+      if (treeVO.children.length > 0) {
         return ExpansionTile(
           leading: Icon(expandMenu ? treeVO.icon : null),
-          backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+          backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.025),
           children: _getMenuListTile(treeVO.children),
           title: title,
         );
@@ -68,7 +67,7 @@ class _LayoutMenuState extends State<LayoutMenu> {
           leading: Icon(iconData),
           title: title,
           onTap: () {
-            if (widget.onClick != null) widget.onClick(treeVO);
+            widget.onClick(treeVO);
           },
         );
       }

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import '../../generated/l10n.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key key}) : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +34,13 @@ class Dashboard extends StatelessWidget {
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    _getAList(Intl.defaultLocale == 'en' ? todoList_en : todoList,
-                        flex: 3, title: S.of(context).dashToDoList),
+                    _getAList(
+                        Intl.defaultLocale == 'en' ? todoList_en : todoList,
+                        flex: 3,
+                        title: S.of(context).dashToDoList),
                     SizedBox(width: 16),
-                    _getAList(linkList, flex: 1, title: S.of(context).dashTopLinks),
+                    _getAList(linkList,
+                        flex: 1, title: S.of(context).dashTopLinks),
                   ],
                 )
               : Container(
@@ -45,9 +48,12 @@ class Dashboard extends StatelessWidget {
                   height: 850,
                   child: Column(
                     children: <Widget>[
-                      _getAList(Intl.defaultLocale == 'en' ? todoList_en : todoList,
-                          flex: 1, title: S.of(context).dashToDoList),
-                      _getAList(linkList, flex: 1, title: S.of(context).dashTopLinks),
+                      _getAList(
+                          Intl.defaultLocale == 'en' ? todoList_en : todoList,
+                          flex: 1,
+                          title: S.of(context).dashToDoList),
+                      _getAList(linkList,
+                          flex: 1, title: S.of(context).dashTopLinks),
                     ],
                   ),
                 ),
@@ -75,7 +81,10 @@ class Dashboard extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           boxShadow: [
-            BoxShadow(color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
+            BoxShadow(
+                color: Colors.black26,
+                offset: Offset(2.0, 2.0),
+                blurRadius: 4.0),
           ],
         ),
         child: Column(
@@ -104,14 +113,15 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Container _buildTitledContainer(String title, {Widget child, double height}) {
+  Container _buildTitledContainer(String title, {Widget? child, double? height}) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       width: double.infinity,
       height: height,
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
+          BoxShadow(
+              color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
         ],
         color: Colors.white,
       ),
@@ -132,7 +142,8 @@ class Dashboard extends StatelessWidget {
     var header = Container(
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
+          BoxShadow(
+              color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
         ],
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Colors.black12)),
@@ -150,7 +161,10 @@ class Dashboard extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(color: Colors.black26, offset: Offset(2.0, 2.0), blurRadius: 4.0),
+            BoxShadow(
+                color: Colors.black26,
+                offset: Offset(2.0, 2.0),
+                blurRadius: 4.0),
           ],
           color: Colors.white,
           border: Border(bottom: BorderSide(color: Colors.black12)),
@@ -158,7 +172,7 @@ class Dashboard extends StatelessWidget {
         child: ListTile(
           dense: true,
           title: Text(v.title),
-          trailing: v.trailing == null ? null : Text(v.trailing),
+          trailing: Text(v.trailing),
         ),
       );
     });
@@ -183,13 +197,17 @@ class Dashboard extends StatelessWidget {
 
   _getOverview(context, isDesktop) {
     var boxList = <Widget>[
-      _getABox('190', S.of(context).dashUpcoming, Colors.red, Icon(FontAwesomeIcons.list)),
+      _getABox('190', S.of(context).dashUpcoming, Colors.red,
+          Icon(FontAwesomeIcons.list)),
       _getASizedBox(isDesktop),
-      _getABox('33', S.of(context).dashInProgress, Colors.blue, Icon(FontAwesomeIcons.footballBall)),
+      _getABox('33', S.of(context).dashInProgress, Colors.blue,
+          Icon(FontAwesomeIcons.footballBall)),
       _getASizedBox(isDesktop),
-      _getABox('58', S.of(context).dashDone, Colors.green, Icon(FontAwesomeIcons.wind)),
+      _getABox('58', S.of(context).dashDone, Colors.green,
+          Icon(FontAwesomeIcons.wind)),
       _getASizedBox(isDesktop),
-      _getABox('1024', S.of(context).dashFinish, Colors.black38, Icon(FontAwesomeIcons.wallet)),
+      _getABox('1024', S.of(context).dashFinish, Colors.black38,
+          Icon(FontAwesomeIcons.wallet)),
     ];
 
     if (isDesktop) {

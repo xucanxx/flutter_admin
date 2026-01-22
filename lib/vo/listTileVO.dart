@@ -1,5 +1,5 @@
 class ListTileVO {
   String title;
   String trailing;
-  ListTileVO({this.title, this.trailing});
+  ListTileVO({required this.title, required this.trailing});
 }

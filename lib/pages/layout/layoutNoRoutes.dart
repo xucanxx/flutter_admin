@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_admin/components/cryRoot.dart';
@@ -18,7 +17,7 @@ class Layout extends StatefulWidget {
 class _LayoutState extends State with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
   List<TreeVO<Menu>> treeVOOpened = [];
-  TabController tabController;
+  late TabController tabController;
   Container content = Container();
   int length = 0;
 
@@ -41,7 +40,9 @@ class _LayoutState extends State with TickerProviderStateMixin {
         return Tab(
           child: Row(
             children: <Widget>[
-              Text(Intl.defaultLocale == 'en' ? treeVO.data.nameEn ?? '' : treeVO.data.name ?? ''),
+              Text(Intl.defaultLocale == 'en'
+                  ? treeVO.data.nameEn
+                  : treeVO.data.name ?? ''),
               SizedBox(width: 3),
               InkWell(
                 child: Icon(Icons.close, size: 10),
@@ -56,7 +57,7 @@ class _LayoutState extends State with TickerProviderStateMixin {
     Row body = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        LayoutMenu(onClick: _openPage),
+        LayoutMenu(onClick: _openPage, data: treeVOOpened),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +95,7 @@ class _LayoutState extends State with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.settings),
         onPressed: () {
-          scaffoldStateKey.currentState.openEndDrawer();
+          scaffoldStateKey.currentState?.openEndDrawer();
         },
       ),
     );
@@ -124,21 +125,23 @@ class _LayoutState extends State with TickerProviderStateMixin {
     setState(() {});
   }
 
-  _openPage(TreeVO<Menu> treeVO) {
+  _openPage(TreeVO<Menu>? treeVO) {
     if (treeVO == null) {
       content = Container();
       return;
     }
-    Widget body = treeVO.data.url != null && layoutRoutesData[treeVO.data.url] != null
-        ? layoutRoutesData[treeVO.data.url]
-        : Center(child: Text('404'));
+    Widget? body =
+        treeVO.data.url != null && layoutRoutesData[treeVO.data.url] != null
+            ? layoutRoutesData[treeVO.data.url]
+            : Center(child: Text('404'));
     content = Container(
       child: Expanded(
-        child: body,
+        child: body!,
       ),
     );
 
-    int index = treeVOOpened.indexWhere((note) => note.data.id == treeVO.data.id);
+    int index =
+        treeVOOpened.indexWhere((note) => note.data.id == treeVO.data.id);
     if (index > -1) {
       tabController.index = index;
     } else {
@@ -148,5 +151,4 @@ class _LayoutState extends State with TickerProviderStateMixin {
     }
     setState(() {});
   }
-
 }

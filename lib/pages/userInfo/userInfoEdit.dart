@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin/api/userInfoApi.dart';
 import 'package:flutter_admin/components/cryButton.dart';
@@ -28,7 +27,8 @@ class UserInfoEditState extends State {
     super.initState();
     UserInfoApi.getCurrentUserInfo().then((v) {
       if (v.data == null) {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Login()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (BuildContext context) => Login()));
       } else {
         setState(() {
           userInfo = UserInfo.fromJson(v.data);
@@ -42,8 +42,14 @@ class UserInfoEditState extends State {
       key: formKey,
       child: Wrap(
         children: <Widget>[
-          CryInput(label: S.of(context).personName, value: userInfo.name, onSaved: (v) => {userInfo.name = v}),
-          CryInput(label: S.of(context).personNickname, value: userInfo.nickName, onSaved: (v) => {userInfo.nickName = v}),
+          CryInput(
+              label: S.of(context).personName,
+              value: userInfo.name,
+              onSaved: (v) => {userInfo.name = v ?? ''}),
+          CryInput(
+              label: S.of(context).personNickname,
+              value: userInfo.nickName,
+              onSaved: (v) => {userInfo.nickName = v ?? ''}),
           CrySelectDate(
             label: S.of(context).personBirthday,
             context: context,
@@ -65,13 +71,14 @@ class UserInfoEditState extends State {
         ],
       ),
     );
-    var b = ButtonBar(
+    var b = OverflowBar(
       alignment: MainAxisAlignment.start,
       children: <Widget>[
         CryButton(
           label: S.of(context).save,
           onPressed: () {
-            FormState form = formKey.currentState;
+            FormState? form = formKey.currentState;
+            if (form == null) return;
             form.save();
             UserInfoApi.saveOrUpdate(userInfo.toJson()).then((res) {
               BotToast.showText(text: S.of(context).saved);

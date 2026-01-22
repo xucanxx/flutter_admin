@@ -12,13 +12,12 @@ Page _$PageFromJson(Map<String, dynamic> json) {
     ..size = json['size'] as num
     ..current = json['current'] as num
     ..pages = json['pages'] as num
-    ..orders = (json['orders'] as List)
-        ?.map((e) =>
-            e == null ? null : OrderItem.fromJson(e as Map<String, dynamic>))
-        ?.toList()
-    ..records = (json['records'] as List)
+    ..orders = (json['orders'] as List?)
+        ?.map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
+        .toList() ?? []
+    ..records = (json['records'] as List?)
         ?.map((e) => e as Map<String, dynamic>)
-        ?.toList();
+        .toList() ?? [];
 }
 
 Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{

@@ -3,13 +3,14 @@ part 'responeBodyApi.g.dart';
 
 @JsonSerializable()
 class ResponeBodyApi<T> {
-    ResponeBodyApi();
+  ResponeBodyApi();
 
-    bool success;
-    String code;
-    String message;
-    T data;
-    
-    factory ResponeBodyApi.fromJson(Map<String,dynamic> json) => _$ResponeBodyApiFromJson(json);
-    Map<String, dynamic> toJson() => _$ResponeBodyApiToJson(this);
+  late bool success;
+  late String code;
+  late String message;
+  late T data;
+
+  factory ResponeBodyApi.fromJson(Map<String, dynamic> json) =>
+      _$ResponeBodyApiFromJson(json) as ResponeBodyApi<T>;
+  Map<String, dynamic> toJson() => _$ResponeBodyApiToJson(this);
 }

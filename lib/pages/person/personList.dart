@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin/api/personApi.dart';
 import 'package:flutter_admin/components/cryButton.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_admin/data/data1.dart';
 import 'package:flutter_admin/models/index.dart' as model;
 import 'package:flutter_admin/models/requestBodyApi.dart';
 import 'package:flutter_admin/models/responeBodyApi.dart';
-import 'package:flutter_admin/utils/dictUtil.dart';
 import 'package:intl/intl.dart';
 import '../../generated/l10n.dart';
 import 'personEdit.dart';
@@ -29,22 +27,22 @@ class PersonListState extends State {
 
   _reset() {
     this.formData = model.Person();
-    formKey.currentState.reset();
+    formKey.currentState?.reset();
     myDS.requestBodyApi.params = formData.toJson();
     myDS.loadData();
   }
 
   _query() {
-    formKey.currentState.save();
+    formKey.currentState?.save();
     myDS.requestBodyApi.params = formData.toJson();
     myDS.loadData();
   }
 
-  _edit({model.Person person}) {
+  _edit({model.Person? person}) {
     cryDialog(
       width: 650,
       context: context,
-      title: person == null ? S.of(context).increase : S.of(context).modify,
+      title: person != null ? S.of(context).modify : S.of(context).increase,
       body: PersonEdit(person: person),
     ).then((v) {
       if (v != null) {
@@ -92,7 +90,7 @@ class PersonListState extends State {
       ),
     );
 
-    ButtonBar buttonBar = ButtonBar(
+    OverflowBar buttonBar = OverflowBar(
       alignment: MainAxisAlignment.start,
       children: <Widget>[
         CryButton(
@@ -154,9 +152,9 @@ class PersonListState extends State {
           PaginatedDataTable(
             header: Text(S.of(context).userList),
             rowsPerPage: rowsPerPage,
-            onRowsPerPageChanged: (int value) {
+            onRowsPerPageChanged: (int? value) {
               setState(() {
-                rowsPerPage = value;
+                rowsPerPage = value ?? 10;
                 myDS.page.size = rowsPerPage;
                 myDS.loadData();
               });
@@ -166,31 +164,38 @@ class PersonListState extends State {
             columns: <DataColumn>[
               DataColumn(
                 label: Text(S.of(context).name),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('name', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('name', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).personNickname),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('nick_name', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('nick_name', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).personGender),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('gender', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('gender', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).personBirthday),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('birthday', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('birthday', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).personDepartment),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('dept_id', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('dept_id', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).creationTime),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('create_time', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('create_time', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).updateTime),
-                onSort: (int columnIndex, bool ascending) => myDS.sort('update_time', ascending),
+                onSort: (int columnIndex, bool ascending) =>
+                    myDS.sort('update_time', ascending),
               ),
               DataColumn(
                 label: Text(S.of(context).operating),
@@ -220,9 +225,9 @@ class PersonListState extends State {
 
 class MyDS extends DataTableSource {
   MyDS();
-  PersonListState state;
-  BuildContext context;
-  List<model.Person> dataList;
+  late PersonListState state;
+  late BuildContext context;
+  late List<model.Person> dataList;
   int selectedCount = 0;
   RequestBodyApi requestBodyApi = RequestBodyApi();
   model.Page page = model.Page();
@@ -238,7 +243,7 @@ class MyDS extends DataTableSource {
     page = model.Page.fromJson(responeBodyApi.data);
 
     dataList = page.records.map<model.Person>((v) {
-      model.Person person = model.Person.fromJson(v);
+      model.Person person = model.Person.fromJson(Map<String, dynamic>.from(v));
       person.selected = false;
       return person;
     }).toList();
@@ -252,31 +257,30 @@ class MyDS extends DataTableSource {
   }
 
   @override
-  DataRow getRow(int index) {
-    var dataIndex = index - page.size * (page.current - 1);
+  DataRow? getRow(int index) {
+    var dataIndex = index - (page.size * (page.current - 1)).toInt();
 
     if (dataIndex >= dataList.length) {
       return null;
     }
-    model.Person person = dataList[dataIndex];
+    model.Person person = dataList[dataIndex.toInt()];
 
     return DataRow.byIndex(
       index: index,
       selected: person.selected,
-      onSelectChanged: (bool value) {
-        person.selected = value;
-        selectedCount += value ? 1 : -1;
+      onSelectChanged: (bool? value) {
+        person.selected = value ?? false;
+        selectedCount += (value ?? false) ? 1 : -1;
         notifyListeners();
       },
       cells: <DataCell>[
-        DataCell(Text(person.name ?? '--')),
-        DataCell(Text(person.nickName ?? '--')),
-        DataCell(Text(DictUtil.getDictName(person.gender, Intl.defaultLocale == 'en' ? genderList_en : genderList))),
-        DataCell(Text(person.birthday ?? '--')),
-        DataCell(Text(DictUtil.getDictName(person.deptId, Intl.defaultLocale == 'en' ? deptIdList_en : deptIdList,
-            defaultValue: '--'))),
-        DataCell(Text(person.createTime ?? '--')),
-        DataCell(Text(person.updateTime ?? '--')),
+        DataCell(Text(person.name)),
+        DataCell(Text(person.nickName)),
+        DataCell(Text(person.gender)),
+        DataCell(Text(person.birthday)),
+        DataCell(Text(person.deptId)),
+        DataCell(Text(person.createTime)),
+        DataCell(Text(person.updateTime)),
         DataCell(ButtonBar(
           children: <Widget>[
             IconButton(
@@ -305,7 +309,7 @@ class MyDS extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => page.total;
+  int get rowCount => page.total.toInt();
 
   @override
   int get selectedRowCount => selectedCount;

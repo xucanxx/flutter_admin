@@ -4,11 +4,12 @@ part 'requestBodyApi.g.dart';
 
 @JsonSerializable()
 class RequestBodyApi {
-    RequestBodyApi();
+  RequestBodyApi();
 
-    Page page;
-    Map params;
-    
-    factory RequestBodyApi.fromJson(Map<String,dynamic> json) => _$RequestBodyApiFromJson(json);
-    Map<String, dynamic> toJson() => _$RequestBodyApiToJson(this);
+  late Page page;
+  late Map params;
+
+  factory RequestBodyApi.fromJson(Map<String, dynamic> json) =>
+      _$RequestBodyApiFromJson(json);
+  Map<String, dynamic> toJson() => _$RequestBodyApiToJson(this);
 }

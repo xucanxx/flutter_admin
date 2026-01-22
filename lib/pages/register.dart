@@ -66,10 +66,10 @@ class _RegisterState extends State {
                 labelText: S.of(context).username,
               ),
               onSaved: (v) {
-                user.userName = v;
+                user.userName = v ?? '';
               },
               validator: (v) {
-                return v.isEmpty ? S.of(context).usernameRequired : null;
+                return (v?.isEmpty ?? true) ? S.of(context).usernameRequired : null;
               },
             ),
           ),
@@ -83,10 +83,10 @@ class _RegisterState extends State {
                 labelText: S.of(context).password,
               ),
               onSaved: (v) {
-                user.password = v;
+                user.password = v ?? '';
               },
               validator: (v) {
-                return v.isEmpty ? S.of(context).passwordRequired : null;
+                return (v?.isEmpty ?? true) ? S.of(context).passwordRequired : null;
               },
             ),
           ),
@@ -101,17 +101,19 @@ class _RegisterState extends State {
                 labelText: S.of(context).confirmPassword,
               ),
               onSaved: (v) {
-                password2 = v;
+                password2 = v ?? '';
               },
               validator: (v) {
-                return password2 == user.password ? null : S.of(context).passwordMismatch;
+                return password2 == user.password
+                    ? null
+                    : S.of(context).passwordMismatch;
               },
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                   child: Text(
                     S.of(context).haveAccountLogin,
                     style: TextStyle(color: Colors.blue),
@@ -124,13 +126,17 @@ class _RegisterState extends State {
             alignment: Alignment.bottomCenter,
             child: SizedBox(
               width: 400,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   _register();
                 },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0)),
-                child: Text(S.of(context).register, style: TextStyle(color: Colors.white70, fontSize: 20)),
-                color: Colors.blue,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0)),
+                ),
+                child: Text(S.of(context).register,
+                    style: TextStyle(color: Colors.white70, fontSize: 20)),
               ),
             ),
           ),
@@ -160,6 +166,7 @@ class _RegisterState extends State {
 
   _register() {
     var form = formKey.currentState;
+    if (form == null) return;
     form.save();
     if (form.validate()) {
       UserApi.register(user.toJson()).then((v) {

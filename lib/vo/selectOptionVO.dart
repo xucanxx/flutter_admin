@@ -1,8 +1,6 @@
-
-
 class SelectOptionVO {
-    SelectOptionVO({this.value,this.label});
+  SelectOptionVO({required this.value, required this.label});
 
-    String value;
-    String label;
+  String value;
+  String label;
 }

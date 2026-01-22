@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,12 +5,12 @@ import 'cryFormField.dart';
 
 class CrySelectDate extends CryFormField {
   CrySelectDate({
-    Key key,
-    String value,
-    String label,
-    ValueChanged onChange,
-    FormFieldSetter onSaved,
-    BuildContext context,
+    Key? key,
+    String? value,
+    required String label,
+    ValueChanged? onChange,
+    FormFieldSetter? onSaved,
+    required BuildContext context,
   }) : super(
           key: key,
           label: label,
@@ -23,24 +22,22 @@ class CrySelectDate extends CryFormField {
               ),
               controller: TextEditingController(text: value),
               onChanged: (v) {
-                if (onChange != null) {
-                  onChange(v);
-                }
+                onChange?.call(v);
               },
               onTap: () async {
-                final DateTime picked = await showDatePicker(
+                final DateTime? picked = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
                   firstDate: DateTime(2015, 8),
                   lastDate: DateTime(2101),
                 );
-                value = DateFormat("yyyy-MM-dd").format(picked);
-                state.didChange();
+                if (picked != null) {
+                  onChange?.call(DateFormat("yyyy-MM-dd").format(picked));
+                  state.didChange();
+                }
               },
               onSaved: (v) {
-                if (onSaved != null) {
-                  onSaved(v);
-                }
+                onSaved?.call(v);
               },
             );
           },

@@ -9,7 +9,7 @@ import 'package:flutter_admin/generated/l10n.dart';
 import 'package:flutter_admin/models/menu.dart';
 
 class MenuForm extends StatefulWidget {
-  MenuForm({Key key, this.menu, this.onSave, this.onClose}) : super(key: key);
+  MenuForm({Key? key, required this.menu, required this.onSave, required this.onClose}) : super(key: key);
   final Menu menu;
   final Function onSave;
   final Function onClose;
@@ -20,7 +20,7 @@ class MenuForm extends StatefulWidget {
 
 class _MenuFormState extends State<MenuForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Menu menu;
+  late Menu menu;
   @override
   void initState() {
     super.initState();
@@ -28,7 +28,7 @@ class _MenuFormState extends State<MenuForm> {
 
   @override
   Widget build(BuildContext context) {
-    menu = widget.menu ?? Menu();
+    menu = widget.menu;
     var form = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -38,16 +38,14 @@ class _MenuFormState extends State<MenuForm> {
             CryButton(
               label: '保存',
               onPressed: () {
-                FormState form = formKey.currentState;
-                if (!form.validate()) {
+                FormState? form = formKey.currentState;
+                if (form == null || !form.validate()) {
                   return;
                 }
                 form.save();
                 MenuDemoApi.saveOrUpdate(menu.toJson()).then((res) {
                   BotToast.showText(text: S.of(context).saved);
-                  if (widget.onSave != null) {
-                    widget.onSave();
-                  }
+                  widget.onSave();
                 });
               },
               iconData: Icons.save,
@@ -56,9 +54,7 @@ class _MenuFormState extends State<MenuForm> {
                 label: '取消',
                 iconData: Icons.cancel,
                 onPressed: () {
-                  if (widget.onClose != null) {
-                    widget.onClose();
-                  }
+                  widget.onClose();
                 }),
           ],
         ),
@@ -81,14 +77,14 @@ class _MenuFormState extends State<MenuForm> {
                   menu.name = v;
                 },
                 validator: (v) {
-                  return v.isEmpty ? '必填' : null;
+                  return (v?.isEmpty ?? true) ? '必填' : null;
                 },
               ),
               CryInput(
                 value: menu.nameEn,
                 label: '菜单英文名',
                 onSaved: (v) {
-                  menu.nameEn = v;
+                  menu.nameEn = v ?? '';
                 },
               ),
               CryInput(
@@ -101,15 +97,15 @@ class _MenuFormState extends State<MenuForm> {
               CryInputNum(
                 value: menu.orderBy,
                 label: '顺序号',
-                onSaved: (num v) {
-                  menu.orderBy = v;
+                onSaved: (num? v) {
+                  menu.orderBy = v ?? 0;
                 },
               ),
               CryInput(
                 value: menu.remark,
                 label: '备注',
                 onSaved: (v) {
-                  menu.remark = v;
+                  menu.remark = v ?? '';
                 },
               ),
             ],

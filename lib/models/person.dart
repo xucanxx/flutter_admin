@@ -4,28 +4,28 @@ part 'person.g.dart';
 
 @JsonSerializable()
 class Person {
-    Person();
+  Person();
 
-    bool selected;
-    String id;
-    String userId;
-    String nickName;
-    String avatarUrl;
-    String gender;
-    String country;
-    String province;
-    String city;
-    String name;
-    String school;
-    String major;
-    String birthday;
-    String entrance;
-    String hometown;
-    String memo;
-    String deptId;
-    String createTime;
-    String updateTime;
-    
-    factory Person.fromJson(Map<String,dynamic> json) => _$PersonFromJson(json);
-    Map<String, dynamic> toJson() => _$PersonToJson(this);
+  late bool selected;
+  late String id;
+  late String userId;
+  late String nickName;
+  late String avatarUrl;
+  late String gender;
+  late String country;
+  late String province;
+  late String city;
+  late String name;
+  late String school;
+  late String major;
+  late String birthday;
+  late String entrance;
+  late String hometown;
+  late String memo;
+  late String deptId;
+  late String createTime;
+  late String updateTime;
+
+  factory Person.fromJson(Map<String, dynamic> json) => _$PersonFromJson(json);
+  Map<String, dynamic> toJson() => _$PersonToJson(this);
 }

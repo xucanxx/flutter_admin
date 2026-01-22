@@ -4,7 +4,7 @@ import 'package:flutter_admin/components/cryToggleButtons.dart';
 import 'package:flutter_admin/vo/selectOptionVO.dart';
 
 class LangSwitch extends StatefulWidget {
-  LangSwitch({Key key}) : super(key: key);
+  LangSwitch({Key? key}) : super(key: key);
 
   @override
   LangSwitchState createState() => LangSwitchState();

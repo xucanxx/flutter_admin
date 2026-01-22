@@ -23,11 +23,11 @@ class VideoUpload extends StatefulWidget {
 
 class VideoUploadState extends State<VideoUpload> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  PickedFile pickedFile;
+  XFile? pickedFile;
   final ImagePicker videoPicker = ImagePicker();
-  VideoPlayerController controller;
+  VideoPlayerController? controller;
   Video video = Video();
-  Uint8List videoBytes;
+  Uint8List? videoBytes;
   final limitMessage = '视频大小不能超过10M';
 
   @override
@@ -44,20 +44,20 @@ class VideoUploadState extends State<VideoUpload> {
           CryInput(
             label: '视频标题',
             value: video.title,
-            onSaved: (v) => {video.title = v},
+            onSaved: (v) => {video.title = v ?? ''},
             validator: (v) {
-              return v.isEmpty ? '必填' : null;
+              return v?.isEmpty ?? true ? '必填' : null;
             },
           ),
           CryInput(
             label: '视频描述',
             value: video.memo,
-            onSaved: (v) => {video.memo = v},
+            onSaved: (v) => {video.memo = v ?? ''},
           ),
         ],
       ),
     );
-    var bb = ButtonBar(
+    var bb = OverflowBar(
       alignment: MainAxisAlignment.start,
       children: <Widget>[
         CryButton(
@@ -92,12 +92,12 @@ class VideoUploadState extends State<VideoUpload> {
   }
 
   pickVideo() async {
-    pickedFile = await videoPicker.getVideo(source: ImageSource.gallery);
+    pickedFile = await videoPicker.pickVideo(source: ImageSource.gallery);
     if (pickedFile == null || !mounted) {
       return;
     }
-    videoBytes = await pickedFile.readAsBytes();
-    if (videoBytes.length > 1000 * 1000 * 10) {
+    videoBytes = await pickedFile!.readAsBytes();
+    if (videoBytes!.length > 1000 * 1000 * 10) {
       cryAlert(context, limitMessage);
       pickedFile = null;
       videoBytes = null;
@@ -106,11 +106,11 @@ class VideoUploadState extends State<VideoUpload> {
       return;
     }
 //    await this.disposeController();
-    controller = VideoPlayerController.network(pickedFile.path);
-    await controller.initialize();
-    await controller.setLooping(true);
-    await controller.play();
-    formKey.currentState.save();
+    controller = VideoPlayerController.network(pickedFile!.path);
+    await controller!.initialize();
+    await controller!.setLooping(true);
+    await controller!.play();
+    formKey.currentState?.save();
     setState(() {});
   }
 
@@ -119,28 +119,33 @@ class VideoUploadState extends State<VideoUpload> {
         ? Container()
         : Padding(
             padding: const EdgeInsets.all(10.0),
-            child: AspectRatioVideo(controller),
+            child: AspectRatioVideo(controller!),
           );
   }
 
   save() async {
-    FormState form = formKey.currentState;
+    FormState? form = formKey.currentState;
+    if (form == null) {
+      return;
+    }
     if (!form.validate()) {
       return;
     }
     form.save();
     String filename = "test.avi"; //todo
-    String mimeType = mime(Path.basename(filename));
-    var mediaType = MediaType.parse(mimeType);
+    String? mimeType = mime(Path.basename(filename));
+    var mediaType = MediaType.parse(mimeType ?? 'application/octet-stream');
     // Uint8List uint8list = await pickedFile.readAsBytes();
-    var file = MultipartFile.fromBytes(videoBytes, contentType: mediaType, filename: filename);
+    var file = MultipartFile.fromBytes(videoBytes!,
+        contentType: mediaType, filename: filename);
     Map map = video.toJson();
     map['file'] = file;
-    FormData formData = FormData.fromMap(map);
+    FormData formData = FormData.fromMap(Map<String, dynamic>.from(map));
 
     ResponeBodyApi responeBodyApi = await VideoApi.upload(formData);
     if (responeBodyApi.success) {
-      Utils.toPortal(context, '保存成功！', '前往门户查看视频', "http://www.cairuoyu.com/flutter_portal");
+      Utils.toPortal(context, '保存成功！', '前往门户查看视频',
+          "http://www.cairuoyu.com/flutter_portal");
       setState(() {
 //        this.disposeController();
       });
@@ -150,16 +155,16 @@ class VideoUploadState extends State<VideoUpload> {
   @override
   void deactivate() {
     if (controller != null) {
-      controller.setVolume(0.0);
-      controller.pause();
+      controller?.setVolume(0.0);
+      controller?.pause();
     }
     super.deactivate();
   }
 
   void disposeController() async {
     if (controller != null) {
-      await controller.setVolume(0.0);
-      await controller.dispose();
+      await controller?.setVolume(0.0);
+      await controller?.dispose();
       controller = null;
     }
   }

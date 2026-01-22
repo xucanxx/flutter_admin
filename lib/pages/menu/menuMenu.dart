@@ -13,7 +13,7 @@ class MenuMenu extends StatefulWidget {
   final Function onEdit;
   final VoidCallback reloadData;
   final List<TreeVO<Menu>> treeVOList;
-  MenuMenu({this.expand = true, this.onEdit, this.treeVOList, this.reloadData});
+  MenuMenu({this.expand = true, required this.onEdit, required this.treeVOList, required this.reloadData});
   @override
   _MenuMenuState createState() => _MenuMenuState();
 }
@@ -30,7 +30,8 @@ class _MenuMenuState extends State<MenuMenu> {
       CryTreeTableColumnData('名称', (Menu v) => v.name),
       CryTreeTableColumnData('英文名', (Menu v) => v.nameEn),
       CryTreeTableColumnData('URL', (Menu v) => v.url),
-      CryTreeTableColumnData('顺序号', (Menu v) => v.orderBy?.toString(), width: 80),
+      CryTreeTableColumnData('顺序号', (Menu v) => v.orderBy.toString(),
+          width: 80),
       CryTreeTableColumnData('备注', (Menu v) => v.remark, width: 300),
     ];
     var result = CryTreeTable(
@@ -38,7 +39,8 @@ class _MenuMenuState extends State<MenuMenu> {
       data: widget.treeVOList,
       toolbars: _getToolbars(),
       onSelected: (v) => _onSelected(v),
-      getRowOper: (TreeVO<Menu> v, TreeVO<Menu> parent) => _getRowOper(v, parent),
+      getRowOper: (TreeVO<Menu> v, TreeVO<Menu> parent) =>
+          _getRowOper(v, parent),
       tableWidth: 1300,
       width: widget.expand ? 1300 : 400,
     );
@@ -53,7 +55,7 @@ class _MenuMenuState extends State<MenuMenu> {
         CryButton(
           iconData: Icons.add,
           label: '添加菜单',
-          onPressed: () => widget.onEdit(Menu()),
+          onPressed: () => widget.onEdit(Menu(id: '', pid: '')),
         ),
         CryButton(
           iconData: Icons.delete,
@@ -80,16 +82,15 @@ class _MenuMenuState extends State<MenuMenu> {
     columnList.add(
       IconButton(
         icon: Icon(Icons.add),
-        onPressed: () => widget.onEdit(Menu(pname: vo.data.name, pid: vo.data.id)),
+        onPressed: () =>
+            widget.onEdit(Menu(id: '', pname: vo.data.name, pid: vo.data.id)),
       ),
     );
     columnList.add(
       IconButton(
         icon: Icon(Icons.edit),
         onPressed: () {
-          if (parent != null) {
-            menu.pname = parent.data.name;
-          }
+          menu.pname = parent.data.name;
           widget.onEdit(menu);
         },
       ),

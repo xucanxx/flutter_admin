@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 class CryButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
-  final IconData iconData;
-  CryButton({this.label, this.iconData, this.onPressed});
+  final VoidCallback? onPressed;
+  final IconData? iconData;
+  CryButton({required this.label, this.iconData, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     if (iconData != null) {
-      return RaisedButton.icon(
+      return ElevatedButton.icon(
         icon: Icon(iconData),
         label: Text(this.label),
         onPressed: onPressed,
       );
     } else {
-      return RaisedButton(
+      return ElevatedButton(
         child: Text(this.label),
         onPressed: onPressed,
       );

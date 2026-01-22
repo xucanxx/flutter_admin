@@ -93,10 +93,12 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onSaved: (v) {
-                            user.userName = v;
+                            user.userName = v ?? '';
                           },
                           validator: (v) {
-                            return v.isEmpty ? S.of(context).usernameRequired : null;
+                            return (v?.isEmpty ?? true)
+                                ? S.of(context).usernameRequired
+                                : null;
                           },
                         ),
                       ),
@@ -114,24 +116,26 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onSaved: (v) {
-                            user.password = v;
+                            user.password = v ?? '';
                           },
                           validator: (v) {
-                            return v.isEmpty ? S.of(context).passwordRequired : null;
+                            return (v?.isEmpty ?? true)
+                                ? S.of(context).passwordRequired
+                                : null;
                           },
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             child: Text(
                               S.of(context).register,
                               style: TextStyle(color: Colors.blue),
                             ),
                             onPressed: () => _register(),
                           ),
-                          FlatButton(
+                          TextButton(
                             child: Text(
                               S.of(context).forgetPassword,
                               style: TextStyle(color: Colors.black45),
@@ -161,13 +165,17 @@ class _LoginState extends State<Login> {
             alignment: Alignment.bottomCenter,
             child: SizedBox(
               width: 420,
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   _login();
                 },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0)),
-                child: Text(S.of(context).login, style: TextStyle(color: Colors.white70, fontSize: 20)),
-                color: Colors.blue,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0)),
+                ),
+                child: Text(S.of(context).login,
+                    style: TextStyle(color: Colors.white70, fontSize: 20)),
               ),
             ),
           ),
@@ -185,7 +193,7 @@ class _LoginState extends State<Login> {
 
   _login() {
     var form = formKey.currentState;
-    if (!form.validate()) {
+    if (form == null || !form.validate()) {
       return;
     }
     form.save();
@@ -195,7 +203,7 @@ class _LoginState extends State<Login> {
         await StoreUtil.loadMenuData();
         String defaultPage = '/layout';
         if (StoreUtil.treeVOList.length > 0) {
-          defaultPage = StoreUtil.treeVOList.first.data.url;
+          defaultPage = StoreUtil.treeVOList.first.data.url ?? '/layout';
         }
         Navigator.pushNamed(context, defaultPage);
       } else {

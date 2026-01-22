@@ -9,7 +9,7 @@ import 'package:flutter_admin/utils/treeUtil.dart';
 import 'package:flutter_admin/vo/treeVO.dart';
 
 class MenuDemoList extends StatefulWidget {
-  MenuDemoList({Key key}) : super(key: key);
+  MenuDemoList({Key? key}) : super(key: key);
 
   @override
   _MenuDemoListState createState() => _MenuDemoListState();
@@ -17,8 +17,8 @@ class MenuDemoList extends StatefulWidget {
 
 class _MenuDemoListState extends State<MenuDemoList> {
   bool isEdit = false;
-  Menu menu = Menu();
-  List<TreeVO<Menu>> treeVOList;
+  Menu menu = Menu(id: '', pid: '');
+  late List<TreeVO<Menu>> treeVOList;
 
   @override
   void initState() {

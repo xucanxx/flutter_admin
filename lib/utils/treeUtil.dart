@@ -1,7 +1,8 @@
 import 'package:flutter_admin/vo/treeVO.dart';
 
 class TreeUtil {
-  static findChildren<T extends TreeData>(List<TreeVO<T>> list, TreeVO<T> treeVO) {
+  static findChildren<T extends TreeData>(
+      List<TreeVO<T>> list, TreeVO<T> treeVO) {
     for (var v in list) {
       if (v.data.pid == treeVO.data.id) {
         treeVO.children.add(v);
@@ -12,7 +13,8 @@ class TreeUtil {
     }
   }
 
-  static findParent<T extends TreeData>(List<TreeVO<T>> list, TreeVO<T> treeVO) {
+  static findParent<T extends TreeData>(
+      List<TreeVO<T>> list, TreeVO<T> treeVO) {
     for (var v in list) {
       if (v.data.id == treeVO.data.pid) {
         v.children.add(treeVO);
@@ -33,19 +35,16 @@ class TreeUtil {
     data.forEach((element) {
       addTreeData(result, element);
     });
-    return result.where((element) => element.data.pid == null).toList();
+    return result.where((element) => element.data.pid == '').toList();
   }
 
   static List<TreeVO<T>> getSelected<T extends TreeData>(List<TreeVO<T>> data) {
-    if (data == null) {
-      return [];
-    }
-    var selected = List<TreeVO<T>>();
+    var selected = <TreeVO<T>>[];
     data.forEach((element) {
       if (element.checked) {
         selected.add(element);
       }
-      if (element.children != null && element.children.length > 0) {
+      if (element.children.length > 0) {
         selected.addAll(getSelected(element.children));
       }
     });

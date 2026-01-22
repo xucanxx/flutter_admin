@@ -35,7 +35,8 @@ List<SelectOptionVO> genderList_en = [
 List<ListTileVO> todoList = [
   ListTileVO(title: '江西：清理“影子药师” 整治“挂证”乱象', trailing: '2020-01-11'),
   ListTileVO(title: '刘鹤会见国际科技合作奖获奖外国专家', trailing: '2020-01-11'),
-  ListTileVO(title: '刘鹤在京检查2020年春运工作时强调：全面小康之年，让回家的路更温馨、更安全', trailing: '2020-01-11'),
+  ListTileVO(
+      title: '刘鹤在京检查2020年春运工作时强调：全面小康之年，让回家的路更温馨、更安全', trailing: '2020-01-11'),
   ListTileVO(title: '怀报国之志，勇攀创新高峰——国家科技奖励大会引发热烈反响', trailing: '2020-01-11'),
   ListTileVO(title: '宁夏回族自治区党委国家安全委员会办公室原副主任于霆被“双开”', trailing: '2020-01-11'),
   ListTileVO(title: '“冷板凳”拼出“热产业” 上海张江迈向科创策源高地', trailing: '2020-01-11'),
@@ -49,13 +50,16 @@ List<ListTileVO> todoList = [
 
 List<ListTileVO> todoList_en = [
   ListTileVO(
-      title: 'Jiangxi: clean up the "shadow pharmacist" and rectify the "hanging license" chaos',
+      title:
+          'Jiangxi: clean up the "shadow pharmacist" and rectify the "hanging license" chaos',
       trailing: '2020-01-11'),
   ListTileVO(
-      title: 'Liu He Meets with Foreign Experts Winning International Science and Technology Cooperation Award',
+      title:
+          'Liu He Meets with Foreign Experts Winning International Science and Technology Cooperation Award',
       trailing: '2020-01-11'),
   ListTileVO(
-      title: 'Liu He Meets with Foreign Experts Winning International Science and Technology Cooperation Award',
+      title:
+          'Liu He Meets with Foreign Experts Winning International Science and Technology Cooperation Award',
       trailing: '2020-01-11'),
   ListTileVO(
       title:
@@ -73,15 +77,17 @@ List<ListTileVO> todoList_en = [
       title:
           '"Cold Bench" Spells Out "Hot Industry" Shanghai Zhangjiang Towards a Highland of Science and Technology and Innovation',
       trailing: '2020-01-11'),
-  ListTileVO(title: 'Beijing has signed 195 responsible planners in 8 districts', trailing: '2020-01-11'),
+  ListTileVO(
+      title: 'Beijing has signed 195 responsible planners in 8 districts',
+      trailing: '2020-01-11'),
 ];
 
 List<ListTileVO> linkList = [
-  ListTileVO(title: 'google'),
-  ListTileVO(title: 'baidu'),
-  ListTileVO(title: 'oracle'),
-  ListTileVO(title: 'flutter'),
-  ListTileVO(title: 'vue'),
-  ListTileVO(title: 'javascript'),
-  ListTileVO(title: 'java'),
+  ListTileVO(title: 'google', trailing: ''),
+  ListTileVO(title: 'baidu', trailing: ''),
+  ListTileVO(title: 'oracle', trailing: ''),
+  ListTileVO(title: 'flutter', trailing: ''),
+  ListTileVO(title: 'vue', trailing: ''),
+  ListTileVO(title: 'javascript', trailing: ''),
+  ListTileVO(title: 'java', trailing: ''),
 ];

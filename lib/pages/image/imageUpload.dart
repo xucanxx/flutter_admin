@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +22,10 @@ class ImageUpload extends StatefulWidget {
 
 class ImageUploadState extends State<ImageUpload> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  PickedFile pickedFile;
+  XFile? pickedFile;
   final ImagePicker imagePicker = ImagePicker();
   model.Image image = model.Image();
-  Uint8List imageBytes;
+  Uint8List? imageBytes;
   final limitMessage = '图片大小不能超过10M';
 
   @override
@@ -35,9 +34,10 @@ class ImageUploadState extends State<ImageUpload> {
   }
 
   pickImage() async {
-    pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
-    imageBytes = await pickedFile.readAsBytes();
-    if (imageBytes.length > 1000 * 1000 * 10) {
+    pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) return;
+    imageBytes = await pickedFile!.readAsBytes();
+    if (imageBytes!.length > 1000 * 1000 * 10) {
       cryAlert(context, limitMessage);
       pickedFile = null;
       imageBytes = null;
@@ -45,30 +45,30 @@ class ImageUploadState extends State<ImageUpload> {
       return;
     }
 
-    if (pickedFile != null) {
-      setState(() {
-        formKey.currentState.save();
-      });
-    }
+    setState(() {
+      formKey.currentState?.save();
+    });
   }
 
   save() async {
-    FormState form = formKey.currentState;
-    if (!form.validate()) {
+    FormState? form = formKey.currentState;
+    if (form == null || !form.validate()) {
       return;
     }
     form.save();
     String filename = "test.png"; //todo
-    String mimeType = mime(Path.basename(filename));
-    var mediaType = MediaType.parse(mimeType);
-    var file = MultipartFile.fromBytes(imageBytes, contentType: mediaType, filename: filename);
-    Map map = image.toJson();
+    String? mimeType = mime(Path.basename(filename));
+    var mediaType = MediaType.parse(mimeType ?? 'image/png');
+    var file = MultipartFile.fromBytes(imageBytes!,
+        contentType: mediaType, filename: filename);
+    Map<String, dynamic> map = image.toJson();
     map['file'] = file;
     FormData formData = FormData.fromMap(map);
 
     ResponeBodyApi responeBodyApi = await ImageApi.upload(formData);
     if (responeBodyApi.success) {
-      Utils.toPortal(context, '保存成功！', '前往门户查看图片', "http://www.cairuoyu.com/flutter_portal");
+      Utils.toPortal(context, '保存成功！', '前往门户查看图片',
+          "http://www.cairuoyu.com/flutter_portal");
       setState(() {
         this.pickedFile = null;
       });
@@ -78,9 +78,9 @@ class ImageUploadState extends State<ImageUpload> {
   Widget previewImage() {
     if (pickedFile != null) {
       if (kIsWeb) {
-        return Image.network(pickedFile.path);
+        return Image.network(pickedFile!.path);
       } else {
-        return Image.file(File(pickedFile.path));
+        return Image.file(File(pickedFile!.path));
       }
     } else {
       return Container();
@@ -96,20 +96,20 @@ class ImageUploadState extends State<ImageUpload> {
           CryInput(
             label: '图片标题',
             value: image.title,
-            onSaved: (v) => {image.title = v},
+            onSaved: (v) => {image.title = v ?? ''},
             validator: (v) {
-              return v.isEmpty ? '必填' : null;
+              return (v?.isEmpty ?? true) ? '必填' : null;
             },
           ),
           CryInput(
             label: '图片描述',
             value: image.memo,
-            onSaved: (v) => {image.memo = v},
+            onSaved: (v) => {image.memo = v ?? ''},
           ),
         ],
       ),
     );
-    var bb = ButtonBar(
+    var bb = OverflowBar(
       alignment: MainAxisAlignment.start,
       children: <Widget>[
         CryButton(
@@ -119,7 +119,7 @@ class ImageUploadState extends State<ImageUpload> {
         ),
         CryButton(
           label: '保存',
-          onPressed: pickedFile == null ? null : () => save(),
+          onPressed: pickedFile != null ? () => save() : null,
           iconData: Icons.save,
         ),
         Text(

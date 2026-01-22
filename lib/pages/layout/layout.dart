@@ -12,42 +12,42 @@ import 'package:intl/intl.dart';
 
 class Layout extends StatefulWidget {
   final Widget content;
-  Layout({this.content});
+  Layout({required this.content});
   @override
   _LayoutState createState() => _LayoutState();
 }
 
 class _LayoutState extends State<Layout> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldStateKey = GlobalKey<ScaffoldState>();
-  TabController tabController;
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
+    tabController =
+        TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
   }
 
   @override
   Widget build(BuildContext context) {
-    String url = ModalRoute.of(context).settings.name;
+    String? url = ModalRoute.of(context)?.settings.name;
     int index = StoreUtil.treeVOOpened.indexWhere((v) => v.data.url == url);
 
     if (index > -1) {
       tabController.index = index;
     } else {
-      if (StoreUtil.treeVOList == null) {
-        StoreUtil.loadMenuData().then((res) {
-          setState(() {});
+      TreeVO<Menu>? treeVO;
+      try {
+        treeVO = StoreUtil.treeVOList.firstWhere((v) {
+          return v.data.url == url;
         });
-        return Container();
+      } catch (e) {
+        // Not found
       }
-
-      TreeVO<Menu> treeVO = StoreUtil.treeVOList.firstWhere((v) {
-        return v.data.url == url;
-      }, orElse: () => null);
       if (treeVO != null) {
         StoreUtil.treeVOOpened.add(treeVO);
-        tabController = TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
+        tabController =
+            TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
         tabController.index = StoreUtil.treeVOOpened.length - 1;
       }
     }
@@ -61,7 +61,9 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
         return Tab(
           child: Row(
             children: <Widget>[
-              Text(Intl.defaultLocale == 'en' ? treeVO.data.nameEn ?? '' : treeVO.data.name ?? ''),
+              Text(Intl.defaultLocale == 'en'
+                  ? treeVO.data.nameEn
+                  : treeVO.data.name ?? ''),
               SizedBox(width: 3),
               InkWell(
                 child: Icon(Icons.close, size: 10),
@@ -80,7 +82,7 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
     Row body = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        LayoutMenu(onClick: _openPage),
+        LayoutMenu(onClick: _openPage, data: StoreUtil.treeVOList),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +108,7 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
               ),
               Container(
                 child: Expanded(
-                  child: widget.content ?? Container(),
+                  child: widget.content,
                 ),
               ),
             ],
@@ -122,7 +124,7 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.settings),
         onPressed: () {
-          scaffoldStateKey.currentState.openEndDrawer();
+          scaffoldStateKey.currentState?.openEndDrawer();
         },
       ),
     );
@@ -140,16 +142,18 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
   }
 
   _openPage(TreeVO<Menu> treeVO) {
-    int index = StoreUtil.treeVOOpened.indexWhere((note) => note.data.id == treeVO.data.id);
+    int index = StoreUtil.treeVOOpened
+        .indexWhere((note) => note.data.id == treeVO.data.id);
     if (index == -1) {
       StoreUtil.treeVOOpened.add(treeVO);
     }
     dispose();
-    Navigator.pushNamed(context, treeVO.data.url);
+    Navigator.pushNamed(context, treeVO.data.url ?? '/');
   }
 
   _closePage(TreeVO<Menu> treeVO) {
-    int index = StoreUtil.treeVOOpened.indexWhere((note) => note.data.id == treeVO.data.id);
+    int index = StoreUtil.treeVOOpened
+        .indexWhere((note) => note.data.id == treeVO.data.id);
     StoreUtil.treeVOOpened.remove(treeVO);
     if (StoreUtil.treeVOOpened.length == 0) {
       dispose();
@@ -161,7 +165,8 @@ class _LayoutState extends State<Layout> with TickerProviderStateMixin {
       _openPage(openPage);
       return;
     }
-    tabController = TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
+    tabController =
+        TabController(vsync: this, length: StoreUtil.treeVOOpened.length);
     setState(() {});
   }
 

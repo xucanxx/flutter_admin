@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_admin/vo/selectOptionVO.dart';
 import 'cryFormField.dart';
 
 class CrySelect extends CryFormField {
   CrySelect({
-    Key key,
-    String label,
-    String value,
-    ValueChanged onChange,
-    FormFieldSetter onSaved,
+    Key? key,
+    required String label,
+    String? value,
+    ValueChanged? onChange,
+    FormFieldSetter? onSaved,
     List<SelectOptionVO> dataList = const [],
   }) : super(
           key: key,
@@ -20,7 +19,7 @@ class CrySelect extends CryFormField {
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 border: OutlineInputBorder(),
               ),
-              value: value,
+              initialValue: value,
               items: dataList.map((v) {
                 return DropdownMenuItem<String>(
                   value: v.value,
@@ -28,14 +27,11 @@ class CrySelect extends CryFormField {
                 );
               }).toList(),
               onChanged: (v) {
-                value = v;
-                if (onChange != null) {
-                  onChange(v);
-                }
+                onChange?.call(v);
                 state.didChange();
               },
               onSaved: (v) {
-                onSaved(v);
+                onSaved?.call(v);
               },
             );
           },

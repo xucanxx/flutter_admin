@@ -7,14 +7,17 @@ part of 'menu.dart';
 // **************************************************************************
 
 Menu _$MenuFromJson(Map<String, dynamic> json) {
-  return Menu()
+  return Menu(
+    id: json['id'] as String? ?? '',
+    pid: json['pid'] as String? ?? '',
+  )
     ..id = json['id'] as String
     ..name = json['name'] as String
     ..nameEn = json['nameEn'] as String
     ..icon = json['icon'] as String
     ..pid = json['pid'] as String
     ..url = json['url'] as String
-    ..orderBy= json['orderBy'] as num 
+    ..orderBy = json['orderBy'] as num
     ..module = json['module'] as String
     ..remark = json['remark'] as String
     ..createTime = json['createTime'] as String

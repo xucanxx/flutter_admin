@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 
 class CryRootScope extends InheritedWidget {
-  CryRootScope(this.state, {Widget child}) : super(child: child);
+  CryRootScope(this.state, {required Widget child}) : super(child: child);
   final CryRootState state;
 
   static CryRootScope of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<CryRootScope>();
+    return context.dependOnInheritedWidgetOfExactType<CryRootScope>()!;
   }
 
   static uploadThemeColor(BuildContext context, Color value) {
-    context.dependOnInheritedWidgetOfExactType<CryRootScope>().state.updateThemeColor(value);
+    context
+        .dependOnInheritedWidgetOfExactType<CryRootScope>()!
+        .state
+        .updateThemeColor(value);
   }
 
   static updateLocale(BuildContext context, String value) {
-    context.dependOnInheritedWidgetOfExactType<CryRootScope>().state.updateLocal(value);
+    context
+        .dependOnInheritedWidgetOfExactType<CryRootScope>()!
+        .state
+        .updateLocal(value);
   }
 
   @override
@@ -23,7 +29,7 @@ class CryRootScope extends InheritedWidget {
 }
 
 class CryRoot extends StatefulWidget {
-  CryRoot(this.child, {Key key}) : super(key: key);
+  CryRoot(this.child, {Key? key}) : super(key: key);
   final Widget child;
 
   @override

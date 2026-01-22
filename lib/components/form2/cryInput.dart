@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,18 +5,18 @@ import 'cryFormField.dart';
 
 class CryInput extends CryFormField {
   CryInput({
-    Key key,
-    double width,
-    String label,
-    String value,
-    ValueChanged onChange,
-    FormFieldSetter<String> onSaved,
-    FormFieldValidator<String> validator,
-    bool enable,
-    List<TextInputFormatter> inputFormatters,
+    Key? key,
+    double? width,
+    required String label,
+    String? value,
+    ValueChanged? onChange,
+    FormFieldSetter<String>? onSaved,
+    FormFieldValidator<String>? validator,
+    bool? enable,
+    List<TextInputFormatter>? inputFormatters,
   }) : super(
           key: key,
-          width: width,
+          width: width ?? double.infinity,
           builder: (CryFormFieldState state) {
             return TextFormField(
               decoration: InputDecoration(
@@ -28,9 +27,7 @@ class CryInput extends CryFormField {
               controller: TextEditingController(text: value),
               inputFormatters: inputFormatters ?? [],
               onChanged: (v) {
-                if (onChange != null) {
-                  onChange(v);
-                }
+                onChange?.call(v);
               },
               onSaved: onSaved,
               validator: validator,

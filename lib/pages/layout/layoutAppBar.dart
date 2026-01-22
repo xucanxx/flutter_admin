@@ -3,7 +3,7 @@ import 'package:flutter_admin/pages/login.dart';
 import 'package:flutter_admin/utils/utils.dart';
 
 class LayoutAppBar extends AppBar {
-  LayoutAppBar(BuildContext context, {Key key, int type})
+  LayoutAppBar(BuildContext context, {Key? key, int? type})
       : super(
           key: key,
           automaticallyImplyLeading: false,
@@ -22,7 +22,8 @@ class LayoutAppBar extends AppBar {
               child: IconButton(
                 icon: Icon(Icons.link),
                 onPressed: () {
-                  Navigator.pushNamed(context, type == 1 ? '/layoutNoRoutes' : '/');
+                  Navigator.pushNamed(
+                      context, type == 1 ? '/layoutNoRoutes' : '/');
                 },
               ),
             ),
@@ -43,7 +44,8 @@ class LayoutAppBar extends AppBar {
                   Utils.logout();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (BuildContext context) => Login()),
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => Login()),
                   );
                 },
               ),

@@ -7,7 +7,10 @@ part of 'orderItem.dart';
 // **************************************************************************
 
 OrderItem _$OrderItemFromJson(Map<String, dynamic> json) {
-  return OrderItem()
+  return OrderItem(
+    column: json['column'] as String,
+    asc: json['asc'] as bool,
+  )
     ..column = json['column'] as String
     ..asc = json['asc'] as bool;
 }

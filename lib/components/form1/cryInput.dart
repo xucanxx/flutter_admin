@@ -1,24 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'cryFormField.dart';
 
 class CryInput extends CryFormField {
   CryInput({
-    Key key,
-    double width,
-    String label,
-    double labelWidth,
-    String value,
-    ValueChanged onChange,
-    FormFieldSetter onSaved,
-    FormFieldValidator<String> validator,
-    bool enable,
+    Key? key,
+    double? width,
+    required String label,
+    double? labelWidth,
+    String? value,
+    ValueChanged? onChange,
+    FormFieldSetter? onSaved,
+    FormFieldValidator<String>? validator,
+    bool? enable,
   }) : super(
           key: key,
-          width: width,
+          width: width ?? 300,
           label: label,
-          labelWidth: labelWidth,
+          labelWidth: labelWidth ?? 100,
           builder: (state) {
             return TextFormField(
               decoration: InputDecoration(
@@ -28,14 +27,10 @@ class CryInput extends CryFormField {
               ),
               controller: TextEditingController(text: value),
               onChanged: (v) {
-                if (onChange != null) {
-                  onChange(v);
-                }
+                onChange?.call(v);
               },
               onSaved: (v) {
-                if (onSaved != null) {
-                  onSaved(v);
-                }
+                onSaved?.call(v);
               },
               validator: validator,
             );

@@ -7,7 +7,7 @@ import 'package:flutter_admin/models/responeBodyApi.dart';
 import 'package:flutter_admin/utils/localStorageUtil.dart';
 
 class HttpUtil {
-  static Dio dio;
+  static Dio? dio;
 
 //  static const String API_PREFIX = 'http://localhost:9094/';
   static const String API_PREFIX = 'http://www.cairuoyu.com/api/p4/';
@@ -17,25 +17,27 @@ class HttpUtil {
   static const String POST = 'post';
   static const String GET = 'get';
 
-  static Future<ResponeBodyApi> get(String url, {data, requestToken = true}) async {
-    Map map = await request(url, data: data, requestToken: requestToken, method: GET);
-    if (map == null) {}
-    ResponeBodyApi responeBodyApi = ResponeBodyApi.fromJson(map);
+  static Future<ResponeBodyApi> get(String url,
+      {data, requestToken = true}) async {
+    Map map =
+        await request(url, data: data, requestToken: requestToken, method: GET);
+    ResponeBodyApi responeBodyApi = ResponeBodyApi.fromJson(Map<String, dynamic>.from(map));
     return responeBodyApi;
   }
 
-  static Future<ResponeBodyApi> post(String url, {data, requestToken = true}) async {
+  static Future<ResponeBodyApi> post(String url,
+      {data, requestToken = true}) async {
     Map map = await request(url, data: data, requestToken: requestToken);
-    if (map == null) {}
-    ResponeBodyApi responeBodyApi = ResponeBodyApi.fromJson(map);
+    ResponeBodyApi responeBodyApi = ResponeBodyApi.fromJson(Map<String, dynamic>.from(map));
     return responeBodyApi;
   }
 
-  static Future<Map> request(String url, {data, method, requestToken = true}) async {
+  static Future<Map> request(String url,
+      {data, method, requestToken = true}) async {
     data = data ?? {};
     method = method ?? POST;
 
-    String token = LocalStorageUtil.get(Constant.KEY_TOKEN);
+    String? token = LocalStorageUtil.get(Constant.KEY_TOKEN);
 //    if (url != "/user/login" && requestToken && token == null) {
     // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Layout1()));
 //    }
@@ -50,7 +52,7 @@ class HttpUtil {
     try {
       Response res = await dio.request(url, data: data);
       result = res.data;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       BotToast.showText(text: '请求出错：' + e.toString());
 
       throw e.toString() + '||' + API_PREFIX + url;
@@ -63,14 +65,17 @@ class HttpUtil {
     if (dio == null) {
       BaseOptions options = new BaseOptions(
         baseUrl: API_PREFIX,
-        connectTimeout: CONNECT_TIMEOUT,
-        receiveTimeout: RECEIVE_TIMEOUT,
+        connectTimeout: Duration(milliseconds: CONNECT_TIMEOUT),
+        receiveTimeout: Duration(milliseconds: RECEIVE_TIMEOUT),
       );
 
       dio = new Dio(options);
     }
 
-    return dio;
+    if (dio == null) {
+      throw Exception('Failed to create Dio instance');
+    }
+    return dio!;
   }
 
   static clear() {

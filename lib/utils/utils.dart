@@ -8,24 +8,27 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   static isLogin() {
-    return LocalStorageUtil.get(Constant.KEY_TOKEN) != null;
+    final token = LocalStorageUtil.get(Constant.KEY_TOKEN);
+    return token != null && token.isNotEmpty;
   }
 
   static logout() {
-    LocalStorageUtil.set(Constant.KEY_TOKEN, null);
-    StoreUtil.treeVOList = null;
+    LocalStorageUtil.remove(Constant.KEY_TOKEN);
+    StoreUtil.treeVOList = [];
     StoreUtil.treeVOOpened = [];
   }
 
-  static launchURL(url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  static launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       throw 'Could not launch $url';
     }
   }
 
-  static toPortal(BuildContext context, String message, String buttonText, String url) {
+  static toPortal(
+      BuildContext context, String message, String buttonText, String url) {
     cryAlertWidget(
       context,
       Container(
@@ -36,8 +39,11 @@ class Utils {
             SizedBox(
               height: 20,
             ),
-            FlatButton(
-              color: Colors.lightBlue,
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.lightBlue,
+                foregroundColor: Colors.white,
+              ),
               child: Text(buttonText),
               onPressed: () {
                 Utils.launchURL(url);
@@ -49,8 +55,8 @@ class Utils {
     );
   }
 
-  static toIconData(String icon) {
-    if (icon == null || icon == '') {
+  static toIconData(String? icon) {
+    if (icon == null || icon.isEmpty) {
       return Icons.menu;
     }
     // IconData iconData = IconData(int.parse(icon), fontFamily: 'MaterialIcons');
